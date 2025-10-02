@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.border-theme {
+  border-color: var(--border);
+}
+
+.text-theme {
+  color: var(--text);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+
+
+
+html.light {
+    --bg: white;
+    --text: black;
+    --border: black;
+}
+
+html.dark {
+    --bg: black;
+    --text: white;
+    --border: white;
+}
+
+html.blue {
+    --text: #3b82f6;
+    --border: #3b82f6; /* Tailwind's blue-500 */
+}
+
+html.red {
+    --text: #ef4444;
+    --border: #ef4444; /* Tailwind's red-500 */
+}
+
+html.green {
+    --text: #22c55e;
+    --border: #22c55e; /* Tailwind's green-500 */
+}
+
+html.orange {
+    --text: #f59e0b;
+    --border: #f59e0b; /* Tailwind's orange-500 */
+}
+
+html.yellow {
+    --text: #adaf1e;
+    --border: #adaf1e; /* Tailwind's yellow-500 */
+}
+
+html.pink {
+    --text: #ec4899; /* Tailwind's pink-500 */
+    --border: #ec4899;
+}
+
+html.purple {
+    --text: #a855f7; /* Tailwind's purple-500 */
+    --border: #a855f7;
+}
