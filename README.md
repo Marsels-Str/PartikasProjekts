@@ -10,7 +10,9 @@ Tālāk rakstītais ir domāts personām ar iepriekšēju pieredzi programmēša
 
 4. Izveidot datubāzi ar "php artisan migrate", vēlāk, lai attiestatītu datubāzi izmantot "php artisan migrate:fresh"
 
-5. Tad atsevišķos termināļos izmantot "php artisan serve" un "npm run dev"
+5. Izveidot projekta atslēgu ar "php artisan key:generate"
+
+6. Tad atsevišķos termināļos izmantot "php artisan serve" un "npm run dev"
 
 Tūlkošanas poga nestrādās, jo tai ir nepieciešams API par maksu un tas šeit netiks norādīts,
 bet ja grib tad var izveidot savu atslēgu ejot uz - https://cloud.google.com/translate
