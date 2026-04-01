@@ -3,48 +3,58 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use App\Services\FoodService;
 
 class FavoriteController extends Controller
 {
+    protected FoodService $foodService;
+
+    public function __construct(FoodService $foodService)
+    {
+        $this->foodService = $foodService;
+    }
 
     public function index()
     {
-        $favorites = Favorite::where('user_id', auth()->id())->pluck('product_id');
-        $favoritedProductIds = Favorite::where('user_id', auth()->id())->pluck('product_id')->toArray();
+        $userId = Auth::id();
 
-        $products = [];
+        // Get all favorite product IDs
+        $favoritedProductIds = Favorite::where('user_id', $userId)
+            ->pluck('product_id')
+            ->toArray();
 
-        foreach ($favorites as $productId) {
-            $response = Http::get("https://world.openfoodfacts.org/api/v2/product/{$productId}");
-            if ($response->ok() && isset($response['product'])) {
-                $products[] = $response['product'];
-            }
-        }
+        // Fetch products using FoodService (cached)
+        $products = collect($favoritedProductIds)
+            ->map(function ($productId) {
+                return $this->foodService->getProduct($productId);
+            })
+            ->filter() // remove nulls if API failed
+            ->values()
+            ->toArray();
 
-        return view('favorites', compact('products', 'favoritedProductIds'));
+        return view('favorites', [
+            'products' => $products,
+            'favoritedProductIds' => $favoritedProductIds,
+        ]);
     }
 
     public function toggle($productId)
     {
-        $user = Auth::user();
-        $favoritedProductIds = Favorite::where('user_id', auth()->id())->pluck('product_id')->toArray();
+        $userId = Auth::id();
 
-        $existing = Favorite::where('user_id', $user->id)
-                            ->where('product_id', $productId)
-                            ->first();
+        $existing = Favorite::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->first();
 
         if ($existing) {
             $existing->delete();
-            return back();
+        } else {
+            Favorite::create([
+                'user_id' => $userId,
+                'product_id' => $productId,
+            ]);
         }
-
-        Favorite::create([
-            'user_id' => $user->id,
-            'product_id' => $productId,
-        ]);
 
         return back();
     }
