@@ -16,8 +16,8 @@ class CreateSearchHistoriesTable extends Migration
         });
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('search_histories');
-    }
+    // public function down()
+    // {
+    //     Schema::dropIfExists('search_histories');
+    // }
 }

@@ -20,8 +20,8 @@ return new class extends Migration
         });
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('login_Histories');
-    }
+    // public function down()
+    // {
+    //     Schema::dropIfExists('login_Histories');
+    // }
 };
