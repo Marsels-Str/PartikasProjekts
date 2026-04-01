@@ -105,37 +105,42 @@ class ProductController extends Controller
     /**
      * Translate text using Google Translate
      */
-    private function translateToEnglish($text)
+    private function translateToEnglish(string $text): string
     {
+        if (!$text) return $text;
+
         $apiKey = env('GOOGLE_TRANSLATE_API_KEY');
-        $url = "https://translation.googleapis.com/language/translate/v2?key={$apiKey}";
 
-        $data = [
-            'q' => $text,
-            'target' => 'en'
-        ];
-
-        $options = [
-            'http' => [
-                'header'  => "Content-Type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data),
-            ],
-        ];
-
-        $context  = stream_context_create($options);
-
-        $response = Http::timeout(10)->get($url);
-
-        if ($response->ok()) {
-            $data = $response->json();
+        if (!$apiKey) {
+            \Log::warning('Google Translate API key not set.');
+            return $text;
         }
 
-        if (!$response) return $text;
+        try {
+            // Proper POST request with JSON body
+            $response = Http::timeout(10)->post(
+                "https://translation.googleapis.com/language/translate/v2?key={$apiKey}",
+                [
+                    'q' => $text,
+                    'target' => 'en',
+                    'format' => 'text'
+                ]
+            );
 
-        $result = json_decode($response, true);
+            if ($response->successful()) {
+                $data = $response->json();
+                return $data['data']['translations'][0]['translatedText'] ?? $text;
+            } else {
+                \Log::error('Google Translate API failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Google Translate exception: '.$e->getMessage());
+        }
 
-        return $result['data']['translations'][0]['translatedText'] ?? $text;
+        return $text; // fallback
     }
 
     /**
