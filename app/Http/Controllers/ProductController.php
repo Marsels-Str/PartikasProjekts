@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
-use Illuminate\Support\Facades\Http;
-use App\Models\SearchHistory;
 use Illuminate\Http\Request;
+use App\Models\SearchHistory;
 use App\Services\FoodService;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductController extends Controller
 {
@@ -124,7 +124,12 @@ class ProductController extends Controller
         ];
 
         $context  = stream_context_create($options);
-        $response = @file_get_contents($url, false, $context);
+
+        $response = Http::timeout(10)->get($url);
+
+        if ($response->ok()) {
+            $data = $response->json();
+        }
 
         if (!$response) return $text;
 
