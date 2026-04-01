@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public $withinTransaction = false;
     /**
      * Run the migrations.
      */
@@ -20,8 +21,11 @@ return new class extends Migration
         });
     }
 
-    // public function down()
-    // {
-    //     Schema::dropIfExists('login_Histories');
-    // }
+    /**
+     * Reverse the migrations.
+     */
+    public function down()
+    {
+        Schema::dropIfExists('login_Histories');
+    }
 };

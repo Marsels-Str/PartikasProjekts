@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateSearchHistoriesTable extends Migration
 {
+    public $withinTransaction = false;
+    /**
+     * Run the migrations.
+     */
     public function up()
     {
         Schema::create('search_histories', function (Blueprint $table) {
@@ -16,8 +20,11 @@ class CreateSearchHistoriesTable extends Migration
         });
     }
 
-    // public function down()
-    // {
-    //     Schema::dropIfExists('search_histories');
-    // }
+    /**
+     * Reverse the migrations.
+     */
+    public function down()
+    {
+        Schema::dropIfExists('search_histories');
+    }
 }
