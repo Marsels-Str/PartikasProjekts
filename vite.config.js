@@ -7,9 +7,9 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/css/theme-blue.css',
-                'resources/css/theme-red.css',
-                'resources/css/theme-green.css',
+                // 'resources/css/theme-blue.css',
+                // 'resources/css/theme-red.css',
+                // 'resources/css/theme-green.css',
             ],
             refresh: true,
         }),
